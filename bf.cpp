@@ -21,17 +21,17 @@ namespace BFInterpreter {
             operator bool() const {
                 return n != 0;
             }
-            void add() {
+            void inc() {
                 if (++n >= num_lim) n -= num_lim;
             }
-            void add(num_type a) {
+            void inc(num_type a) {
                 n += a;
                 adj();
             }
-            void sub() {
+            void dec() {
                 if (--n < 0) n += num_lim;
             }
-            void sub(num_type a) {
+            void dec(num_type a) {
                 n -= a;
                 adj();
             }
@@ -51,7 +51,7 @@ namespace BFInterpreter {
             mem_type m;
             pt_type pt;
             BFMemory() : m(pt_lim), pt(0) {};
-            const auto size() const {
+            auto size() const {
                 return m.size();
             }
             const auto& cur() const {
@@ -86,12 +86,12 @@ namespace BFInterpreter {
             m.prv(as...);
         }
         template<typename... Ts>
-        void add(Ts... as) {
-            m.cur().add(as...);
+        void inc(Ts... as) {
+            m.cur().inc(as...);
         }
         template<typename... Ts>
-        void sub(Ts... as) {
-            m.cur().sub(as...);
+        void dec(Ts... as) {
+            m.cur().dec(as...);
         }
         void put() const {
             m.cur().put();
@@ -99,7 +99,7 @@ namespace BFInterpreter {
         void get() {
             m.cur().get();
         }
-        void str() {
+        void lpb() {
             // Accepting mismatched brackets as long as no jump is attempted is an expected behaviour
             constexpr static auto err_msg = "Mismatched brackets found: at least one more [ than ]";
             if (m.cur()) return;
@@ -120,7 +120,7 @@ namespace BFInterpreter {
                 }
             }
         }
-        void end() {
+        void lpe() {
             // Accepting mismatched brackets as long as no jump is attempted is an expected behaviour
             constexpr static auto err_msg = "Mismatched brackets found: at least one more ] than [";
             if (!m.cur()) return;
@@ -145,7 +145,7 @@ namespace BFInterpreter {
             }
         }
     public:
-        constexpr static char c_nxt = '>', c_prv = '<', c_add = '+', c_sub = '-', c_put = '.', c_get = ',', c_str = '[', c_end = ']';
+        constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
         static debug_type debug;
         BF(std::istream& s = std::cin) : m(), is(s), ops(), op_pos(0) {
             if constexpr (opt) {
@@ -154,16 +154,16 @@ namespace BFInterpreter {
                     switch (c) {
                         case c_nxt:
                         case c_prv:
-                        case c_add:
-                        case c_sub: {
+                        case c_inc:
+                        case c_dec: {
                             if (ops.back().first == c) ++ops.back().second;
                             else ops.push_back({c, 1});
                             break;
                         }
                         case c_put:
                         case c_get:
-                        case c_str:
-                        case c_end: ops.push_back({c, 1}); break;
+                        case c_lpb:
+                        case c_lpe: ops.push_back({c, 1}); break;
                     }
                 }
             }
@@ -176,12 +176,12 @@ namespace BFInterpreter {
                 switch (op) {
                     case c_nxt: nxt(cnt); break;
                     case c_prv: prv(cnt); break;
-                    case c_add: add(cnt); break;
-                    case c_sub: sub(cnt); break;
+                    case c_inc: inc(cnt); break;
+                    case c_dec: dec(cnt); break;
                     case c_put: put(); break;
                     case c_get: get(); break;
-                    case c_str: str(); break;
-                    case c_end: end(); break;
+                    case c_lpb: lpb(); break;
+                    case c_lpe: lpe(); break;
                 }
                 return true;
             } else {
@@ -189,12 +189,12 @@ namespace BFInterpreter {
                     case EOF: is.unget(); return false; break;
                     case c_nxt: nxt(); break;
                     case c_prv: prv(); break;
-                    case c_add: add(); break;
-                    case c_sub: sub(); break;
+                    case c_inc: inc(); break;
+                    case c_dec: dec(); break;
                     case c_put: put(); break;
                     case c_get: get(); break;
-                    case c_str: str(); break;
-                    case c_end: end(); break;
+                    case c_lpb: lpb(); break;
+                    case c_lpe: lpe(); break;
                 }
                 return true;
             }
@@ -209,14 +209,10 @@ namespace BFInterpreter {
 
 int main(int argc, char *argv[]) {
     using namespace std;
-    if (argc > 1) {
-        for (int i = 1; i < argc; ++i) {
-            ifstream ifs(argv[i]);
-            BFInterpreter::BF b(ifs);
-            b.run();
-        }
-    } else {
-        BFInterpreter::BF().run();
-    }
+    if (argc > 1) for (int i = 1; i < argc; ++i) {
+        ifstream ifs(argv[i]);
+        BFInterpreter::BF b(ifs);
+        b.run();
+    } else BFInterpreter::BF().run();
     return 0;
 }
