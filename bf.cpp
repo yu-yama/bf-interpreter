@@ -19,25 +19,26 @@ namespace BFInterpreter {
         struct BFNumber {
             using num_type = int;
             constexpr static num_type num_lim = 256;
+            static_assert(num_lim > 0);
             num_type n;
-            BFNumber() : n(0) {};
-            void adj() {
+            constexpr BFNumber() noexcept : n(0) {};
+            constexpr void adj() noexcept {
                 if ((n %= num_lim) < 0) n += num_lim;
             }
-            operator bool() const {
+            constexpr operator bool() const noexcept {
                 return n != 0;
             }
-            void inc() {
+            constexpr void inc() noexcept {
                 if (++n >= num_lim) n -= num_lim;
             }
-            void inc(num_type a) {
+            constexpr void inc(num_type a) noexcept {
                 n += a;
                 adj();
             }
-            void dec() {
+            constexpr void dec() noexcept {
                 if (--n < 0) n += num_lim;
             }
-            void dec(num_type a) {
+            constexpr void dec(num_type a) noexcept {
                 n -= a;
                 adj();
             }
@@ -54,10 +55,11 @@ namespace BFInterpreter {
             using mem_type = std::vector<BFNumber>;
             using pt_type = int;
             constexpr static pt_type pt_lim = 30000;
+            static_assert(pt_lim > 0);
             mem_type m;
             pt_type pt;
             BFMemory() : m(pt_lim), pt(0) {};
-            auto size() const {
+            auto size() const noexcept {
                 return m.size();
             }
             const auto& cur() const {
@@ -92,11 +94,11 @@ namespace BFInterpreter {
             m.prv(as...);
         }
         template<typename... Ts>
-        void inc(Ts... as) {
+        void inc(Ts... as) noexcept {
             m.cur().inc(as...);
         }
         template<typename... Ts>
-        void dec(Ts... as) {
+        void dec(Ts... as) noexcept {
             m.cur().dec(as...);
         }
         void put() const {
