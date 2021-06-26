@@ -5,6 +5,12 @@
 #include <string>
 
 namespace BFInterpreter {
+    struct out_of_range : public std::out_of_range {
+        using std::out_of_range::out_of_range;
+    };
+    struct syntax_error : public std::logic_error {
+        using std::logic_error::logic_error;
+    };
     template<bool opt = true>
     struct BF {
         using cnt_type = int;
@@ -64,13 +70,13 @@ namespace BFInterpreter {
                 nxt(1);
             }
             void nxt(pt_type a) {
-                if ((pt += a) >= pt_lim) throw std::out_of_range("Pointer exceeded the right boundary of the memory.");
+                if ((pt += a) >= pt_lim) throw out_of_range("Pointer exceeded the right boundary of the memory.");
             }
             void prv() {
                 prv(1);
             }
             void prv(pt_type a) {
-                if ((pt -= a) < 0) throw std::out_of_range("Pointer exceeded the left boundary of the memory.");
+                if ((pt -= a) < 0) throw out_of_range("Pointer exceeded the left boundary of the memory.");
             }
         };
         BFMemory m;
@@ -106,14 +112,14 @@ namespace BFInterpreter {
             cnt_type d = 1;
             while (d > 0) {
                 if constexpr (opt) {
-                    if (op_pos >= static_cast<cnt_type>(ops.size())) throw std::runtime_error(err_msg);
+                    if (op_pos >= static_cast<cnt_type>(ops.size())) throw syntax_error(err_msg);
                     else switch (ops[op_pos++].first) {
                         case '[': ++d; break;
                         case ']': --d; break;
                     }
                 } else {
                     switch (is.get()) {
-                        case EOF: throw std::runtime_error(err_msg); break;
+                        case EOF: throw syntax_error(err_msg); break;
                         case '[': ++d; break;
                         case ']': --d; break;
                     }
@@ -127,7 +133,7 @@ namespace BFInterpreter {
             cnt_type d = -1;
             while (d < 0) {
                 if constexpr (opt) {
-                    if (op_pos < 0) throw std::runtime_error(err_msg);
+                    if (op_pos < 0) throw syntax_error(err_msg);
                     else {
                         switch (ops[op_pos -= 2].first) {
                             case '[': ++d; break;
@@ -137,7 +143,7 @@ namespace BFInterpreter {
                     }
                 } else {
                     switch (is.unget(), is.unget(), is.get()) {
-                        case EOF: throw std::runtime_error(err_msg); break;
+                        case EOF: throw syntax_error(err_msg); break;
                         case '[': ++d; break;
                         case ']': --d; break;
                     }
