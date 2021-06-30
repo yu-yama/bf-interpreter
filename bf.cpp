@@ -121,9 +121,9 @@ namespace BFInterpreter {
                     }
                 } else {
                     switch (is.get()) {
-                        case EOF: throw syntax_error(err_msg); break;
                         case '[': ++d; break;
                         case ']': --d; break;
+                        default: if (is.eof()) throw syntax_error(err_msg); break;
                     }
                 }
             }
@@ -145,9 +145,9 @@ namespace BFInterpreter {
                     }
                 } else {
                     switch (is.unget(), is.unget(), is.get()) {
-                        case EOF: throw syntax_error(err_msg); break;
                         case '[': ++d; break;
                         case ']': --d; break;
+                        default: if (is.eof()) throw syntax_error(err_msg); break;
                     }
                 }
             }
@@ -158,7 +158,7 @@ namespace BFInterpreter {
         BF(std::istream& s = std::cin) : m(), is(s), ops(), op_pos(0) {
             if constexpr (opt) {
                 ops.push_back({0, 0});
-                for (char c; (c = is.get()) != EOF;) {
+                for (char c; c = is.get(), !is.eof();) {
                     switch (c) {
                         case c_nxt:
                         case c_prv:
@@ -194,7 +194,6 @@ namespace BFInterpreter {
                 return true;
             } else {
                 switch (is.get()) {
-                    case EOF: is.unget(); return false; break;
                     case c_nxt: nxt(); break;
                     case c_prv: prv(); break;
                     case c_inc: inc(); break;
@@ -203,6 +202,13 @@ namespace BFInterpreter {
                     case c_get: get(); break;
                     case c_lpb: lpb(); break;
                     case c_lpe: lpe(); break;
+                    default: {
+                        if (is.eof()) {
+                            is.unget();
+                            return false;
+                        }
+                        break;
+                    }
                 }
                 return true;
             }
