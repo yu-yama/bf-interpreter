@@ -83,7 +83,7 @@ namespace BFInterpreter {
         };
         BFMemory m;
         std::istream& is;
-        std::vector< std::pair<char, int> > ops;
+        std::vector< std::pair<char, cnt_type> > ops;
         cnt_type op_pos;
         template<typename... Ts>
         void nxt(Ts... as) {
@@ -177,7 +177,7 @@ namespace BFInterpreter {
             }
         };
         bool step() {
-            for (int i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) std::cerr << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
+            for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) std::cerr << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
             if constexpr (opt) {
                 if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
                 auto [op, cnt] = ops[op_pos++];
@@ -212,7 +212,7 @@ namespace BFInterpreter {
         }
     };
     template<bool opt>
-    int BF<opt>::debug = -1;
+    typename BF<opt>::debug_type BF<opt>::debug = -1;
 }
 
 int main(int argc, char *argv[]) {
