@@ -1,4 +1,4 @@
-// src/bf.hpp
+// include/bf/bf.hpp
 //
 // Copyright 2021 yu-yama
 //
