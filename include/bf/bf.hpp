@@ -46,23 +46,13 @@ namespace BFInterpreter {
             constexpr operator bool() const noexcept {
                 return n != 0;
             }
-            constexpr void inc() noexcept {
-                if (++n >= num_lim) n -= num_lim;
-            }
             constexpr void inc(num_type a) noexcept {
                 n += a;
                 adj();
             }
-            constexpr void dec() noexcept {
-                if (--n < 0) n += num_lim;
-            }
             constexpr void dec(num_type a) noexcept {
                 n -= a;
                 adj();
-            }
-            constexpr BFNumber& operator+=(const BFNumber& a) noexcept {
-                if ((n += a.n) >= num_lim) n -= num_lim;
-                return *this;
             }
             void put() const {
                 std::cout.put(static_cast<char>(n));
@@ -90,14 +80,8 @@ namespace BFInterpreter {
             auto&& cur() {
                 return m[pt];
             }
-            void nxt() {
-                nxt(1);
-            }
             void nxt(pt_type a) {
                 if ((pt += a) >= pt_lim) throw out_of_range("Pointer exceeded the right boundary of the memory.");
-            }
-            void prv() {
-                prv(1);
             }
             void prv(pt_type a) {
                 if ((pt -= a) < 0) throw out_of_range("Pointer exceeded the left boundary of the memory.");
@@ -107,21 +91,17 @@ namespace BFInterpreter {
         std::istream& is;
         std::vector< std::pair<char, cnt_type> > ops;
         cnt_type op_pos;
-        template<typename... Ts>
-        void nxt(Ts... as) {
-            m.nxt(as...);
+        void nxt(cnt_type a) {
+            m.nxt(a);
         }
-        template<typename... Ts>
-        void prv(Ts... as) {
-            m.prv(as...);
+        void prv(cnt_type a) {
+            m.prv(a);
         }
-        template<typename... Ts>
-        void inc(Ts... as) noexcept {
-            m.cur().inc(as...);
+        void inc(cnt_type a) noexcept {
+            m.cur().inc(a);
         }
-        template<typename... Ts>
-        void dec(Ts... as) noexcept {
-            m.cur().dec(as...);
+        void dec(cnt_type a) noexcept {
+            m.cur().dec(a);
         }
         void put() const {
             m.cur().put();
