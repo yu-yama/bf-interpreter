@@ -55,13 +55,13 @@ namespace BFInterpreter {
                 n -= a;
                 adj();
             }
-            void put(std::ostream& o) const {
+            void put(std::ostream& o, std::ostream& d) const {
                 o.put(static_cast<char>(n));
-                if (debug >= 0) std::cerr << "(O) " << n << '\n';
+                if (debug >= 0) d << "(O) " << n << '\n';
             }
-            void get(std::istream& i) {
+            void get(std::istream& i, std::ostream& d) {
                 n = i.get();
-                if (debug >= 0) std::cerr << "(I) " << n << '\n';
+                if (debug >= 0) d << "(I) " << n << '\n';
             }
         };
         struct BFMemory {
@@ -91,6 +91,7 @@ namespace BFInterpreter {
         BFMemory m;
         std::istream& is;
         std::ostream& os;
+        std::ostream& ds;
         std::vector< std::pair<char, cnt_type> > ops;
         cnt_type op_pos;
         void nxt(cnt_type a) {
@@ -106,10 +107,10 @@ namespace BFInterpreter {
             m.cur().dec(a);
         }
         void put() const {
-            m.cur().put(os);
+            m.cur().put(os, ds);
         }
         void get() {
-            m.cur().get(is);
+            m.cur().get(is, ds);
         }
         void lpb() {
             // Accepting mismatched brackets as long as no jump is attempted is an expected behaviour
@@ -143,7 +144,7 @@ namespace BFInterpreter {
     public:
         constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
         static debug_type debug;
-        BF(const std::string& s, std::istream& i = std::cin, std::ostream& o = std::cout) : m(), is(i), os(o), ops({{0, 0}}), op_pos(0) {
+        BF(const std::string& s, std::istream& i = std::cin, std::ostream& o = std::cout, std::ostream& d = std::cerr) : m(), is(i), os(o), ds(d), ops({{0, 0}}), op_pos(0) {
             for (const auto& c : s) switch (c) {
                 case c_nxt:
                 case c_prv:
@@ -162,9 +163,9 @@ namespace BFInterpreter {
                 default: if constexpr (!opt) ops.push_back({c, 0}); break;
             }
         };
-        BF(std::istream& s = std::cin, std::istream& i = std::cin, std::ostream& o = std::cout) : BF(std::string(std::istreambuf_iterator<char>(s), {}), i, o) {}
+        BF(std::istream& s = std::cin, std::istream& i = std::cin, std::ostream& o = std::cout, std::ostream& d = std::cerr) : BF(std::string(std::istreambuf_iterator<char>(s), {}), i, o, d) {}
         bool step() {
-            for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) std::cerr << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
+            for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) ds << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
             if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
             auto [op, cnt] = ops[op_pos++];
             switch (op) {
