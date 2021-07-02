@@ -14,6 +14,7 @@ jobs:
       workflow_src_dir: ${{github.workspace}}
       workflow_build_dir: ${{github.workspace}}/build
       build_type: Release
+      GTEST_COLOR: 1
     defaults:
       run:
         working-directory: ${{env.workflow_build_dir}}

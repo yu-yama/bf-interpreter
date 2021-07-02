@@ -14,6 +14,7 @@ jobs:
       workflow_src_dir: ${{github.workspace}}/test
       workflow_build_dir: ${{github.workspace}}/test/build
       build_type: Debug
+      GTEST_COLOR: 1
     defaults:
       run:
         working-directory: ${{env.workflow_build_dir}}
