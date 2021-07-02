@@ -22,7 +22,10 @@ else()
     add_compile_options(-Wall -Werror -Wextra -Wconversion -Wno-sign-conversion -Wshadow)
 endif()
 
-add_subdirectory(googletest)
+enable_testing()
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/googletest)
+include(GoogleTest)
 
 list(APPEND Tests InstructionsTest SampleTest)
 list(APPEND Files instructions_test.cpp sample_test.cpp)
@@ -31,4 +34,5 @@ foreach(Test File IN ZIP_LISTS Tests Files)
     add_executable(${Test} ${SRC_DIR}/${File})
     target_link_libraries(${Test} gtest_main)
     target_include_directories(${Test} PUBLIC ${INCLUDE_DIR})
+    gtest_discover_tests(${Test})
 endforeach()
