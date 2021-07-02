@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  cmake:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        cxx: [g++, clang++]
+    env:
+      CXX: ${{matrix.cxx}}
+      workflow_src_dir: ${{github.workspace}}/test
+      workflow_build_dir: ${{env.workflow_src_dir}}/build
+      build_type: Debug
+    defaults:
+      run:
+        working-directory: ${{env.workflow_build_dir}}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure
+      run: cmake ${{env.workflow_src_dir}} -DCMAKE_BUILD_TYPE=${{env.build_type}}
+
+    - name: Build
+      run: cmake --build . --config ${{env.build_type}}
+
+    - name: Test
+      run: ctest --extra-verbose --build-config ${{env.build_type}}
