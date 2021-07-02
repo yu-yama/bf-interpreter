@@ -135,18 +135,10 @@ namespace BFInterpreter {
             if (m.cur()) return;
             cnt_type d = 1;
             while (d > 0) {
-                if constexpr (opt) {
-                    if (op_pos >= static_cast<cnt_type>(ops.size())) throw syntax_error(err_msg);
-                    else switch (ops[op_pos++].first) {
-                        case '[': ++d; break;
-                        case ']': --d; break;
-                    }
-                } else {
-                    switch (is.get()) {
-                        case '[': ++d; break;
-                        case ']': --d; break;
-                        default: if (is.eof()) throw syntax_error(err_msg); break;
-                    }
+                if (op_pos >= static_cast<cnt_type>(ops.size())) throw syntax_error(err_msg);
+                else switch (ops[op_pos++].first) {
+                    case '[': ++d; break;
+                    case ']': --d; break;
                 }
             }
         }
@@ -156,84 +148,55 @@ namespace BFInterpreter {
             if (!m.cur()) return;
             cnt_type d = -1;
             while (d < 0) {
-                if constexpr (opt) {
-                    if (op_pos < 0) throw syntax_error(err_msg);
-                    else {
-                        switch (ops[op_pos -= 2].first) {
-                            case '[': ++d; break;
-                            case ']': --d; break;
-                        }
-                        ++op_pos;
-                    }
-                } else {
-                    switch (is.unget(), is.unget(), is.get()) {
+                if (op_pos < 0) throw syntax_error(err_msg);
+                else {
+                    switch (ops[op_pos -= 2].first) {
                         case '[': ++d; break;
                         case ']': --d; break;
-                        default: if (is.eof()) throw syntax_error(err_msg); break;
                     }
+                    ++op_pos;
                 }
             }
         }
     public:
         constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
         static debug_type debug;
-        BF(std::istream& s = std::cin) : m(), is(s), ops(), op_pos(0) {
-            if constexpr (opt) {
-                ops.push_back({0, 0});
-                for (int c; c = is.get(), !is.eof();) {
-                    switch (c) {
-                        case c_nxt:
-                        case c_prv:
-                        case c_inc:
-                        case c_dec: {
-                            if (ops.back().first == c) ++ops.back().second;
-                            else ops.push_back({c, 1});
+        BF(std::istream& s = std::cin) : m(), is(s), ops({{0, 0}}), op_pos(0) {
+            for (int c; c = is.get(), !is.eof();) {
+                switch (c) {
+                    case c_nxt:
+                    case c_prv:
+                    case c_inc:
+                    case c_dec: {
+                        if constexpr (opt) if (ops.back().first == c) {
+                            ++ops.back().second;
                             break;
                         }
-                        case c_put:
-                        case c_get:
-                        case c_lpb:
-                        case c_lpe: ops.push_back({c, 1}); break;
+                        [[fallthrough]];
                     }
+                    case c_put:
+                    case c_get:
+                    case c_lpb:
+                    case c_lpe: ops.push_back({c, 1}); break;
+                    default: if constexpr (!opt) ops.push_back({c, 0}); break;
                 }
             }
         };
         bool step() {
             for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) std::cerr << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
-            if constexpr (opt) {
-                if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
-                auto [op, cnt] = ops[op_pos++];
-                switch (op) {
-                    case c_nxt: nxt(cnt); break;
-                    case c_prv: prv(cnt); break;
-                    case c_inc: inc(cnt); break;
-                    case c_dec: dec(cnt); break;
-                    case c_put: put(); break;
-                    case c_get: get(); break;
-                    case c_lpb: lpb(); break;
-                    case c_lpe: lpe(); break;
-                }
-                return true;
-            } else {
-                switch (is.get()) {
-                    case c_nxt: nxt(); break;
-                    case c_prv: prv(); break;
-                    case c_inc: inc(); break;
-                    case c_dec: dec(); break;
-                    case c_put: put(); break;
-                    case c_get: get(); break;
-                    case c_lpb: lpb(); break;
-                    case c_lpe: lpe(); break;
-                    default: {
-                        if (is.eof()) {
-                            is.unget();
-                            return false;
-                        }
-                        break;
-                    }
-                }
-                return true;
+            if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
+            auto [op, cnt] = ops[op_pos++];
+            switch (op) {
+                case c_nxt: nxt(cnt); break;
+                case c_prv: prv(cnt); break;
+                case c_inc: inc(cnt); break;
+                case c_dec: dec(cnt); break;
+                case c_put: put(); break;
+                case c_get: get(); break;
+                case c_lpb: lpb(); break;
+                case c_lpe: lpe(); break;
             }
+            return true;
         }
         void run() {
             while (step()) ;
