@@ -1,6 +1,16 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - 'LICENSE'
+      - 'NOTICE'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'LICENSE'
+      - 'NOTICE'
+      - 'README.md'
 
 jobs:
   cmake:
