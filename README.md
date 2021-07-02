@@ -12,7 +12,7 @@ cd build
 cmake ..
 make
 ```
-1. An executable will be generated as `BFInterpreter` in the `build` directory
+2. An executable will be generated as `BFInterpreter` in the `build` directory
 
 ## How to
 #### Read from file(s)
@@ -25,3 +25,7 @@ Run the executable with no command line arguments and pass a bf source to `cin`.
 Apache License Version 2.0. See `LICENSE` file for details.
 
 Also, refer to `NOTICE` file for license and copyright notices of other projects that may be used.
+
+## TODO
+* Integration test including IO
+* Set up workflows for MSVC compilers
