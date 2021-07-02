@@ -41,7 +41,8 @@ namespace BFInterpreter {
             num_type n;
             constexpr BFNumber() noexcept : n(0) {};
             constexpr void adj() noexcept {
-                if ((n %= num_lim) < 0) n += num_lim;
+                if constexpr ((num_lim & (num_lim - 1)) == 0) n &= num_lim - 1;
+                else if ((n %= num_lim) < 0) n += num_lim;
             }
             constexpr operator bool() const noexcept {
                 return n != 0;
