@@ -60,6 +60,10 @@ namespace BFInterpreter {
                 n -= a;
                 adj();
             }
+            constexpr BFNumber& operator+=(const BFNumber& a) noexcept {
+                if ((n += a.n) >= num_lim) n -= num_lim;
+                return *this;
+            }
             void put() const {
                 std::cout.put(static_cast<char>(n));
                 if (debug >= 0) std::cerr << "(O) " << n << '\n';
