@@ -1,9 +1,21 @@
 # bf-interpreter
 BF interpreter written in C++
 
+## Build using CMake
+1. Run the followings at the root of this repository
+```
+mkdir build
+cd build
+cmake ..
+```
+1. The executable will be generated as `BFInterpreter`
+
 ## How to
-1. Compile `bf.cpp`
-2. Pass bf source file to the compiled file either as command-line argument(s) (like `./a.out sample.bf`) or from `stdin`. Source files will be interpreted independently in the order of passing them when you give multiple filenames.
+#### Read from file(s)
+Pass bf source file(s) to the executable as command-line argument(s) (like `./BFInterpreter sample.bf`). Source files will be interpreted independently in the order of passing them when you give multiple filenames.
+
+#### Read from `cin`
+Run the executable with no command line arguments and pass a bf source to `cin`.
 
 ## Licence
 Apache License Version 2.0 applies to all files written by the contributors of this repository. See `LICENSE` file for details.
