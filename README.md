@@ -1,4 +1,7 @@
 # bf-interpreter
+[![Build](https://github.com/yu-yama/bf-interpreter/actions/workflows/build.yml/badge.svg)](https://github.com/yu-yama/bf-interpreter/actions/workflows/build.yml)
+[![Test](https://github.com/yu-yama/bf-interpreter/actions/workflows/test.yml/badge.svg)](https://github.com/yu-yama/bf-interpreter/actions/workflows/test.yml)
+
 BF interpreter written in C++
 
 ## Build using CMake
