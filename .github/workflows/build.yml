@@ -12,7 +12,7 @@ jobs:
     env:
       CXX: ${{matrix.cxx}}
       workflow_src_dir: ${{github.workspace}}
-      workflow_build_dir: ${{env.workflow_src_dir}}/build
+      workflow_build_dir: ${{github.workspace}}/build
       build_type: Release
     defaults:
       run:
