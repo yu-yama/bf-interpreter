@@ -61,7 +61,7 @@ namespace BFInterpreter {
                 adj();
             }
             void put() const {
-                std::cout.put(n);
+                std::cout.put(static_cast<char>(n));
                 if (debug >= 0) std::cerr << "(O) " << n << '\n';
             }
             void get() {
@@ -176,7 +176,7 @@ namespace BFInterpreter {
         BF(std::istream& s = std::cin) : m(), is(s), ops(), op_pos(0) {
             if constexpr (opt) {
                 ops.push_back({0, 0});
-                for (char c; c = is.get(), !is.eof();) {
+                for (int c; c = is.get(), !is.eof();) {
                     switch (c) {
                         case c_nxt:
                         case c_prv:
