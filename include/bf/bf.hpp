@@ -88,7 +88,6 @@ namespace BFInterpreter {
             }
         };
         BFMemory m;
-        std::istream& is;
         std::vector< std::pair<char, cnt_type> > ops;
         cnt_type op_pos;
         void nxt(cnt_type a) {
@@ -141,8 +140,8 @@ namespace BFInterpreter {
     public:
         constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
         static debug_type debug;
-        BF(std::istream& s = std::cin) : m(), is(s), ops({{0, 0}}), op_pos(0) {
-            for (int c; c = is.get(), !is.eof();) {
+        BF(std::istream& s = std::cin) : m(), ops({{0, 0}}), op_pos(0) {
+            for (int c; c = s.get(), !s.eof();) {
                 switch (c) {
                     case c_nxt:
                     case c_prv:
