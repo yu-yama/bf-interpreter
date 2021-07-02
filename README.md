@@ -18,7 +18,7 @@ Pass bf source file(s) to the executable as command-line argument(s) (like `./BF
 #### Read from `cin`
 Run the executable with no command line arguments and pass a bf source to `cin`.
 
-## Licence
-Apache License Version 2.0 applies to all files written by the contributors of this repository. See `LICENSE` file for details.
+## License
+Apache License Version 2.0. See `LICENSE` file for details.
 
 Also, refer to `NOTICE` file for license and copyright notices of other projects that may be used.
