@@ -7,8 +7,9 @@ BF interpreter written in C++
 mkdir build
 cd build
 cmake ..
+make
 ```
-1. The executable will be generated as `BFInterpreter`
+1. An executable will be generated as `BFInterpreter` in the `build` directory
 
 ## How to
 #### Read from file(s)
