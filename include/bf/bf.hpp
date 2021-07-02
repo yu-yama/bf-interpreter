@@ -143,27 +143,26 @@ namespace BFInterpreter {
     public:
         constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
         static debug_type debug;
-        BF(std::istream& s = std::cin, std::istream& i = std::cin, std::ostream& o = std::cout) : m(), is(i), os(o), ops({{0, 0}}), op_pos(0) {
-            for (int c; c = s.get(), !s.eof();) {
-                switch (c) {
-                    case c_nxt:
-                    case c_prv:
-                    case c_inc:
-                    case c_dec: {
-                        if constexpr (opt) if (ops.back().first == c) {
-                            ++ops.back().second;
-                            break;
-                        }
-                        [[fallthrough]];
+        BF(const std::string& s, std::istream& i = std::cin, std::ostream& o = std::cout) : m(), is(i), os(o), ops({{0, 0}}), op_pos(0) {
+            for (const auto& c : s) switch (c) {
+                case c_nxt:
+                case c_prv:
+                case c_inc:
+                case c_dec: {
+                    if constexpr (opt) if (ops.back().first == c) {
+                        ++ops.back().second;
+                        break;
                     }
-                    case c_put:
-                    case c_get:
-                    case c_lpb:
-                    case c_lpe: ops.push_back({c, 1}); break;
-                    default: if constexpr (!opt) ops.push_back({c, 0}); break;
+                    [[fallthrough]];
                 }
+                case c_put:
+                case c_get:
+                case c_lpb:
+                case c_lpe: ops.push_back({c, 1}); break;
+                default: if constexpr (!opt) ops.push_back({c, 0}); break;
             }
         };
+        BF(std::istream& s = std::cin, std::istream& i = std::cin, std::ostream& o = std::cout) : BF(std::string(std::istreambuf_iterator<char>(s), {}), i, o) {}
         bool step() {
             for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) std::cerr << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
             if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
