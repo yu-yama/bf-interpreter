@@ -72,6 +72,12 @@ namespace BFInterpreter {
             mem_type m;
             pt_type pt;
             BFMemory() : m(pt_lim), pt(0) {};
+            const auto& mem() const {
+                return m;
+            }
+            const auto& mem_pt() const {
+                return pt;
+            }
             auto size() const noexcept {
                 return m.size();
             }
@@ -164,6 +170,24 @@ namespace BFInterpreter {
             }
         };
         BF(std::istream& s = std::cin, std::istream& i = std::cin, std::ostream& o = std::cout, std::ostream& d = std::cerr) : BF(std::string(std::istreambuf_iterator<char>(s), {}), i, o, d) {}
+        constexpr static auto num_lim() noexcept {
+            return BFNumber::num_lim;
+        }
+        constexpr static auto pt_lim() noexcept {
+            return BFMemory::pt_lim;
+        }
+        const auto& mem() const {
+            return m.mem();
+        }
+        const auto& mem_pt() const {
+            return m.mem_pt();
+        }
+        const auto& mem_size() const {
+            return m.size();
+        }
+        const auto& mem_cur() const {
+            return m.cur();
+        }
         bool step() {
             for (debug_type i = 0, l = std::min(static_cast<debug_type>(m.size()), debug); i < l; ++i) ds << m.m.at(i).n << (i + 1 == l ? '\n' : ' ');
             if (op_pos >= static_cast<cnt_type>(ops.size())) return false;
