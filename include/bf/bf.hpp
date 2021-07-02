@@ -14,6 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#pragma once
+
 #include <iostream>
 #include <algorithm>
 #include <fstream>
@@ -235,19 +237,4 @@ namespace BFInterpreter {
     };
     template<bool opt>
     typename BF<opt>::debug_type BF<opt>::debug = -1;
-}
-
-int main(int argc, char *argv[]) {
-    using namespace std;
-    int err_cnt = 0;
-    if (argc > 1) for (int i = 1; i < argc; ++i) {
-        ifstream ifs(argv[i]);
-        if (ifs) {
-            BFInterpreter::BF<> b(ifs);
-            b.run();
-        } else ++err_cnt, std::cerr << "An error occurred while reading file " << argv[i] << "; the file possibly does not exist.\n"; // Reporting, but not immediately throwing an exception in case of an input error is an expected behaviour
-        ifs.close();
-    } else BFInterpreter::BF<>().run();
-    if (err_cnt) throw ios_base::failure(to_string(err_cnt) + " input error(s) occurred.");
-    return 0;
 }
