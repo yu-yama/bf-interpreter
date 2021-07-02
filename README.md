@@ -8,4 +8,4 @@ BF interpreter written in C++
 ## Licence
 Apache License Version 2.0 applies to all files written by the contributors of this repository. See `LICENSE` file for details.
 
-This project uses googletest (Copyright 2008, Google Inc.), licensed under the 3-clause BSD license, for unit testing. Refer to `test/googletest/LICENSE` file for details.
+Also, refer to `NOTICE` file for license and copyright notices of other projects that may be used.
