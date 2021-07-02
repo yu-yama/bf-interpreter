@@ -21,6 +21,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Mkdir
+      working-directory: ${{env.workflow_src_dir}}
+      run: mkdir ${{env.workflow_build_dir}}
+
     - name: Configure
       run: cmake ${{env.workflow_src_dir}} -DCMAKE_BUILD_TYPE=${{env.build_type}}
 
