@@ -27,5 +27,4 @@ Apache License Version 2.0. See `LICENSE` file for details.
 Also, refer to `NOTICE` file for license and copyright notices of other projects that may be used.
 
 ## TODO
-* Integration test including IO
 * Set up workflows for MSVC compilers
