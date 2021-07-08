@@ -23,6 +23,7 @@ jobs:
       CXX: ${{matrix.cxx}}
       workflow_src_dir: ${{github.workspace}}/test
       workflow_build_dir: ${{github.workspace}}/test/build
+      bf_sample_src_dir: ${{github.workspace}}/test/sample
       build_type: Debug
       GTEST_COLOR: 1
     defaults:
