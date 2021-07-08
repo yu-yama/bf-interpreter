@@ -52,8 +52,8 @@ TYPED_TEST(SampleTest, file) {
             defs >> BFInterpreter::BF<opt>::debug;
             defs.get(); // remove delimiter
         } else BFInterpreter::BF<opt>::debug = BFInterpreter::BF<opt>::no_debug;
-        auto to_string = [](istream& s) {
-            return s ? string(istreambuf_iterator<char>(s), {}) : "";
+        auto to_string = [](istream& str) {
+            return str ? string(istreambuf_iterator<char>(str), {}) : "";
         };
         istringstream is(to_string(ifs));
         ostringstream os, ds;
