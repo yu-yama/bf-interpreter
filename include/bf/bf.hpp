@@ -149,6 +149,8 @@ namespace BFInterpreter {
         }
     public:
         constexpr static char c_nxt = '>', c_prv = '<', c_inc = '+', c_dec = '-', c_put = '.', c_get = ',', c_lpb = '[', c_lpe = ']';
+        constexpr static debug_type no_debug = -1;
+        static_assert(no_debug < 0);
         static debug_type debug;
         BF(const std::string& s, std::istream& i = std::cin, std::ostream& o = std::cout, std::ostream& d = std::cerr) : m(), is(i), os(o), ds(d), ops({{0, 0}}), op_pos(0) {
             for (const auto& c : s) switch (c) {
@@ -209,5 +211,5 @@ namespace BFInterpreter {
         }
     };
     template<bool opt>
-    typename BF<opt>::debug_type BF<opt>::debug = -1;
+    typename BF<opt>::debug_type BF<opt>::debug = BF<opt>::no_debug;
 }
